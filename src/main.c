@@ -18,6 +18,7 @@ int main(int argc, char** argv){
     int i = 0;
     for ( ; i < PRODUCERS ; ++i){
         t_producer_args *args = (t_producer_args*) malloc(sizeof(t_producer_args));
+        if (!args) ERROR(BAD_MEMORY_ALLOCATION,"[ERROR]: Couldn\'t allocate memory for arguments in producer thread %d\n",i);
         args->number_ammount=number_ammount;
         pthread_create(&tid[i],NULL,thread_producer,(void*)args);
     }

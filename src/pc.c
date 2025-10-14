@@ -73,7 +73,7 @@ void* thread_consumer(void* void_args){
             sem_post(&full_slot);
             break;
         }
-        
+
         if (ammount_of_numbers_in_buffer == 0) {
             sem_post(&mutex);
             continue;
@@ -96,6 +96,7 @@ void* thread_consumer(void* void_args){
     }
 
     long long int *result = malloc(sizeof(long long int));
+    if (!result) ERROR(BAD_MEMORY_ALLOCATION,"[ERROR]: Couldn\'t allocate memory for return value in Consumer thread\n");
     *result = primes_found;
     pthread_exit((void*) result);
 }
