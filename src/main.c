@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <semaphore.h>
 #include "pc.h"
 #include "error.h"
 
@@ -13,14 +12,17 @@ int main(int argc, char** argv){
     int number_ammount  =   atoi(argv[1]);
     int buffer_size     =   atoi(argv[2]);
     init_buffer(buffer_size);
-    set_number_ammount(number_ammount);
 
 
     pthread_t tid[PRODUCERS+CONSUMERS];
 
     int i = 0;
-    for ( ; i < PRODUCERS ; ++i)
-        pthread_create(&tid[i],NULL,thread_producer,NULL);
+    for ( ; i < PRODUCERS ; ++i){
+        t_producer_args *args = (t_producer_args*) malloc(sizeof(t_producer_args));
+        args->id = i;
+        args->number_ammount=number_ammount;
+        pthread_create(&tid[i],NULL,thread_producer,(void*)args);
+    }
 
     for ( ; i < CONSUMERS ; ++i){
         t_consumer_args *args = (t_consumer_args*) malloc(sizeof(t_consumer_args));
